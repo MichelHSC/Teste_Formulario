@@ -2,10 +2,13 @@ class Validator {
 
     constructor() {
         this.validations = [
-            'data-required',
             'data-min-length',
             'data-max-length',
-            'data-email-validate'
+            'data-only-latters',
+            'data-email-validate',
+            'data-required',
+            'data-equal',
+            'data-password-validate',
         ];
     }
 
@@ -15,17 +18,16 @@ class Validator {
 
         let currentValidations = document.querySelectorAll("form .error-validation")
 
-        if (currentValidations.length > 0) {
-            this.currentValidations(currentValidations);
+        if (currentValidations.length) {
+            this.cleanValidations(currentValidations);
         }
-
+        // pegar todos inputs
         let inputs = form.getElementsByTagName("input");
-
         // Transforma uma HTMLCollection e um Array
         let inputsArray = [...inputs];
-
+        // loop nos inputs e validação mediante aos atributos encontrados
         inputsArray.forEach(function (input) {
-
+            // fazer validação de acordo com o atributo do input
             for (let i = 0; this.validations.length > i; i++) {
                 if (input.getAttribute(this.validations[i]) != null) {
 
@@ -53,7 +55,7 @@ class Validator {
 
     }
 
-    maxlength(input, maxValue){
+    maxlength(input, maxValue) {
         let inputLength = input.value.length;
 
         let errorMessage = `O campo precisa ter menos que ${maxValue} caracters`;
@@ -63,67 +65,114 @@ class Validator {
         }
 
     }
+    // método para validar strings que só contem letras
+    onlylatters(input) {
 
-    emailvalidate(input){
-        
+        let re = /^[A-Za-z]+$/;;
+
+        let inputValue = input.value;
+
+        let errorMessage = `Este campo não aceita números nem caracteres especiais`
+
+        if (!re.test(inputValue)) {
+            this.printMessage(input, errorMessage);
+        }
+    }
+
+    emailvalidate(input) {
+
         let re = /\S+@\S+\.\S+/;
 
         let email = input.value;
 
         let errorMessage = "Insira um e-mail no padrão email@email.com";
 
-        if(!re.test(email)){
-            this.printMessage(input,errorMessage);
+        if (!re.test(email)) {
+            this.printMessage(input, errorMessage);
         }
     }
-    
 
+    // verificar se um campo está igual o outro
+    equal(input, inputName) {
 
-    printMessage(input, msg) {
-        let errorQty = input.parentNode.querySelector(".error.validation")
-        
-        if(errorQty === null) {
-            
-        let template = document.querySelector(".error-validation").cloneNode(true);
+        let inputToCompare = document.getElementsByName(inputName)[0];
 
-        template.textContent = msg;
+        let errorMessage = `Este campo precisa estar igual ao ${inputName}`
 
-        let inputParent = input.parentNode;
-
-        template.classList.remove("template");
-
-        inputParent.appendChild(template);
+        if (input.value != inputToCompare.value) {
+            this.printMessage(input, errorMessage);
         }
-
     }
 
-    required(input){
+    required(input) {
         let inputValue = input.value;
 
-        if(inputValue === ""){
+        if (inputValue === "") {
             let errorMessage = "Este campo é Obrigatorio";
 
             this.printMessage(input, errorMessage);
         }
     }
+    // validando o campo de senha
+    passwordvalidate(input) {
 
-    cleanValidations(validations){
-        validations.forEach(el => el.remove());
+        // explodir string em array
+        let charArr = input.value.split("");
+
+        let uppercases = 0;
+        let numbers = 0;
+
+        for (let i = 0; charArr.length > i; i++) {
+            if (charArr[i] === charArr[i].toUpperCase() && isNaN(parseInt(charArr[i]))) {
+                uppercases++;
+            } else if (!isNaN(parseInt(charArr[i]))) {
+                numbers++;
+            }
+        }
+        if(uppercases === 0 || numbers === 0) {
+            let errorMessage = `A senha precisa um caractere maiúsculo e um número`;
+      
+            this.printMessage(input, errorMessage);
+          }
+      
+        }
+
+        printMessage(input, msg) {
+            let errorQty = input.parentNode.querySelector(".error-validation")
+
+            if (errorQty === null) {
+
+                let template = document.querySelector(".error-validation").cloneNode(true);
+
+                template.textContent = msg;
+
+                let inputParent = input.parentNode;
+
+                template.classList.remove("template");
+
+                inputParent.appendChild(template);
+            }
+
+        }
+
+
+        cleanValidations(validations) {
+            validations.forEach(el => el.remove());
+        }
+
     }
 
-}
 
+    const form = document.querySelector("#register-form");
+    const submit = document.querySelector("#btn-submit");
 
-const form = document.querySelector("#register-form");
-const submit = document.querySelector("#btn-submit");
-
-const validator = new Validator(); // Criar uma instância do Validator
+    const validator = new Validator(); // Criar uma instância do Validator
 
 // Evento que dispara as validações
 
-submit.addEventListener("click", function (e) {
+submit.addEventListener("click", function(e) {
 
-    e.preventDefault();
+        e.preventDefault();
 
-    validator.validate(form);
-});
+        validator.validate(form);
+    });

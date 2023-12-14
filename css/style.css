@@ -11,13 +11,9 @@
 input,
 label {
   display: block;
+  outline: none;
   width: 100%;
 
-}
-
-input:focus,
-label:focus {
-  outline: none;
 }
 
 a {
@@ -110,7 +106,7 @@ input[type="submit"] {
 
 /* validacoes de erros */
 
-.erro-validation {
+.error-validation {
   color: #FF1A1A;
   position: absolute;
   top: 57px;
