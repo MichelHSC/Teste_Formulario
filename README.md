@@ -1,8 +1,8 @@
-Formulário de Registro com Validações em JavaScript
+### Formulário de Registro com Validações em JavaScript
 
 Este projeto consiste em um formulário de registro web com validações em JavaScript. O formulário foi desenvolvido para capturar informações como e-mail, nome, sobrenome e senha, e incorpora validações dinâmicas para garantir que os dados inseridos atendam a critérios específicos.
 
-Recursos Principais:
+### Recursos Principais:
 Validações Dinâmicas: O JavaScript é utilizado para validar os campos do formulário em tempo real, oferecendo feedback instantâneo ao usuário.
 
 Regras de Senha: A senha é validada quanto à presença de caracteres maiúsculos e números, garantindo maior segurança.
@@ -18,7 +18,7 @@ CSS: O estilo do formulário é definido em um arquivo CSS separado para uma apr
 
 JavaScript: A lógica de validação é implementada em JavaScript, utilizando uma classe Validator para organizar e modularizar as validações.
 
-Como Utilizar:
+### Como Utilizar:
 Clone o repositório.
 Abra o arquivo index.html em um navegador web.
 Preencha o formulário e observe as validações dinâmicas em ação.
